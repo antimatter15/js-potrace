@@ -483,17 +483,25 @@
         return OutPutImage;
         */
     }
-    function /*bool*/ FindNext(Matrix, /*ref*/ x, /*ref*/ y)
+    function FindNext(Matrix, x, y, P){
+		if(P){
+			return FindNext3A(Matrix, x, y, P); //well. 3 args. but i can tcount. i mean 4
+		}else{
+			return FindNext2A(Matrix, x, y);
+		}
+	}
+    
+    function /*bool*/ FindNext2A(Matrix, /*ref*/ x, /*ref*/ y)
     {
-        for (y = 1; y < Matrix.GetLength(1) - 1; y++)
-            for (x = 0; x < Matrix.GetLength(0) - 1; x++)
+        for (y = 1; y < Matrix[0].length - 1; y++)
+            for (x = 0; x < Matrix.length - 1; x++)
                 if (!Matrix[x + 1, y]) // black found
                     return true;
         x = -1;
         return false;
     }
     // <summary>
-    function /*bool*/ FindNext(Matrix, /*ref*/ x, /*ref*/ y, /*Path*/ P)
+    function /*bool*/ FindNext3A(Matrix, /*ref*/ x, /*ref*/ y, /*Path*/ P)
     {
         var i = 0;
         var n = P.pt.length;
@@ -1088,6 +1096,7 @@ such that all j with i<j<k lie on a line connecting i,k. */
 
 
     }
+}
 
 
 
@@ -1397,6 +1406,8 @@ such that all j with i<j<k lie on a line connecting i,k. */
                     ymin = w.y;
                 }
             }
+            
+        }
         function fixx(){
             if (Q[1, 1] == 0.0)
             {
@@ -1416,6 +1427,7 @@ such that all j with i<j<k lie on a line connecting i,k. */
                 }
             }
         }
+	
         function corners(){
             /* check four corners */
             for (l = 0; l < 2; l++)
@@ -1437,7 +1449,6 @@ such that all j with i<j<k lie on a line connecting i,k. */
             pp.Curves.vertex[i].x = xmin + x0 - 1;
             pp.Curves.vertex[i].y = ymin + y0 - 1;
         }
-
 
     }
     /* ---------------------------------------------------------------------- */
@@ -2002,6 +2013,4 @@ on failure. */
         }
 
     }
-}
 
-}
