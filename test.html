@@ -1,0 +1,47 @@
+<script src="potrace2.js"></script>
+<canvas id="c"></canvas>
+<script>
+  var c = document.getElementById('c');
+  var cx = c.getContext('2d');
+  function loadim(im){
+    console.log(im)
+    c.width = parseInt(im.width);
+    c.height = parseInt(im.height);
+    cx.drawImage(im, 0, 0);
+    var data = cx.getImageData(0, 0, im.width, im.height);
+    console.log(data)
+    var Z = 0;
+    var thresh = 128;
+    
+    var bitmap = [];
+    for(var x = 0; x < im.width + 2; x++){
+      bitmap[x] = [];
+    }
+    for(var y = 0; y < im.height; y++){
+      for(var x = 0; x < im.width; x++){
+
+        var R = data.data[Z], G = data.data[Z+1], B = data.data[Z+2];
+        //var Y = 0.2126 * R + 0.7152 * G + 0.0722 * B;
+        var Y = Math.max(R, Math.max(G, B));
+        if(Y > thresh){
+          bitmap[x+1][y+1] = true;
+        }else{
+          bitmap[x+1][y+1] = false;
+        }
+        Z += 4;
+      }
+    }
+    for(var y = 0; y < im.height + 2; y++){
+      bitmap[0][y] = true;
+      bitmap[im.width + 1][ y] = true;
+    }
+    for(var x = 0; x < im.width + 2; x++){
+      bitmap[x][0] = true;
+      bitmap[x][ im.height +1] = true;
+    }
+    
+    window.bm = bitmap;
+  }
+</script>
+
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAAuCAAAAAC3oO56AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oLBxUZO6WQveYAAAE+SURBVEjHxZbbDsMgDENzKv7/l72Hcg0Etm7SKk3tRIyNkwDIHj7XU6Cl7SjlQ58hKQCWozoD12FprU/GKJFJsJssx2PyoRN0RDaiBYfzyWflHoT7F1m9zif39NKIZVsJVGDWxoY0ebFqmkX2ysRsyzXiuIP7ybOC4kCwzi719PEdhjifNZVuqVWxVpy9yJw/BQXfO0SJUfvc1HNVSxRKkdqZrE4tMUdErSOQ5o9qzpQ532XEVx8+k3MbIO/QZQYmRYlZzXKHXbEeRtJWF5hMlgapyzy6/0JmGmuIAUhk2lx9uNfUn6yrrzQGAaN85pIJw7fYtLr1Hi/Xa3W1uErTYY/v+18bs1Jk3TenIOGGuT/LBpf0PpKz7vj81ON1YvsyDJBSZMyZs0L5WO2JdXPD0Pf3IT1D8vs7GH+4970AR3Jxe9ptOO0AAAAASUVORK5CYII=" onload="loadim(this)" >
